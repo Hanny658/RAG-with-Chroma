@@ -141,4 +141,4 @@ venv/
 .idea/
 
 # Database files
-chroma_db/.
+chroma_db/
