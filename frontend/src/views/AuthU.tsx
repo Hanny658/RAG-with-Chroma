@@ -33,7 +33,7 @@ const AuthU: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-white px-4">
+    <div className="flex items-center w-screen justify-center min-h-screen bg-white px-4">
       <div className="p-6 rounded-xl shadow-md w-full max-w-sm">
         <h2 className="text-2xl font-bold mb-4 text-center">Please Enter Password: </h2>
         <input

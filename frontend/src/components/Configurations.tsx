@@ -1,7 +1,7 @@
 const Configurations = () => {
     return (
       <>
-          <b>This is Cinfig component.</b>
+          <b>This is Config component.</b>
       </>
     );
   };
