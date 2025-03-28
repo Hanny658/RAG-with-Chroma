@@ -11,11 +11,11 @@ from classes import ChatRequest, Document
 app = FastAPI()
 
 # Global Configs
-PORT_NUM = 3053     # Port number used for this app to listen
+PORT_NUM = 3053     # Port number used for this app to listen (Surely not in Carlton)
 N_RES = 3           # Number of the closest result should we attach when running RAG
 
-# Load env from root directory (parent folder of Backend/)
-project_root = Path(__file__).resolve().parent.parent
+# Load env from root directory (backend/ by default. edit below for customed dir)
+project_root = Path(__file__).resolve().parent
 dotenv_path = project_root / '.env'
 load_dotenv(dotenv_path=dotenv_path)
 # ========================================================
