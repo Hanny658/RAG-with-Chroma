@@ -2,15 +2,35 @@ import os
 from dotenv import load_dotenv
 from pathlib import Path
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+import json
 import chromadb
 from openai import OpenAI
 import uvicorn
 # import defined custom classes
 from classes import ChatRequest, Document
 
-app = FastAPI()
 
-# Global Configs
+# Load CORS settings from the JSON file
+def load_cors_config(file_path: str):
+    with open(file_path, 'r') as file:
+        return json.load(file)
+
+
+# Path to the JSON file (adjust if needed)
+CONFIG_PATH = os.path.join(os.path.dirname(__file__), 'cors_config.json')
+cors_config = load_cors_config(CONFIG_PATH)
+
+app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=cors_config.get("allow_origins", []),
+    allow_credentials=cors_config.get("allow_credentials", False),
+    allow_methods=cors_config.get("allow_methods", []),
+    allow_headers=cors_config.get("allow_headers", []),
+)
+
+# Global Configs (Magic numbers? Hum-mm...)
 PORT_NUM = 3053     # Port number used for this app to listen (Surely not in Carlton)
 N_RES = 3           # Number of the closest result should we attach when running RAG
 

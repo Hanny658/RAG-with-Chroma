@@ -1,0 +1,9 @@
+{
+  "allow_origins": [
+    "http://localhost",
+    "http://localhost:3000",
+    "https://example.com"
+  ],
+  "allow_methods": ["*"],
+  "allow_headers": ["*"]
+}
