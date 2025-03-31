@@ -144,4 +144,4 @@ venv/
 chroma_db/
 
 # Ignore real CORS config keep it secret
-backend/*.json
+backend/cors_config.json
