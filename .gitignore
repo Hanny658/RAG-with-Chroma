@@ -142,3 +142,6 @@ venv/
 
 # Database files
 chroma_db/
+
+# example CORS config
+backend/cors_config.json
