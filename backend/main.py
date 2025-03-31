@@ -18,7 +18,7 @@ def load_cors_config(file_path: str):
 
 
 # Path to the JSON file (adjust if needed)
-CONFIG_PATH = os.path.join(os.path.dirname(__file__), 'cors_config.json')
+CONFIG_PATH = os.path.join(os.path.dirname(__file__), 'cors_config.example.json')
 cors_config = load_cors_config(CONFIG_PATH)
 
 app = FastAPI()

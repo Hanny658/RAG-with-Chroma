@@ -2,7 +2,7 @@
   "allow_origins": [
     "http://localhost",
     "http://localhost:3000",
-    "https://example.com"
+    "https://my.example.com"
   ],
   "allow_methods": ["*"],
   "allow_headers": ["*"]
