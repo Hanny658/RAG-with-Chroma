@@ -14,6 +14,10 @@ const ViewAll: React.FC = () => {
   const [docContent, setDocContent] = useState<string>('');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<string | null>(null);
 
+  // Page devision
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
   // GET all doc IDs fore present
   useEffect(() => {
     axios
@@ -32,6 +36,10 @@ const ViewAll: React.FC = () => {
     }
   }, [selectedDoc, backendURL]);
 
+  useEffect(() => {
+    setCurrentPage(1); 
+  }, [filter]);
+
   // Delete the Doc on doc ID
   const handleDelete = (docId: string) => {
     axios
@@ -45,6 +53,11 @@ const ViewAll: React.FC = () => {
   };
 
   const filteredDocs = docs.filter((id) => id.toLowerCase().includes(filter.toLowerCase()));
+  const totalPages = Math.ceil(filteredDocs.length / itemsPerPage);
+  const currentItems = filteredDocs.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
     <div className="space-y-4">
@@ -59,7 +72,7 @@ const ViewAll: React.FC = () => {
 
       {/* Doc List */}
       <div className="space-y-2">
-        {filteredDocs.map((id, index) => (
+        {currentItems.map((id, index) => (
           <div
             key={id}
             className="flex justify-between items-center bg-white p-3 rounded shadow hover:bg-gray-50"
@@ -82,6 +95,42 @@ const ViewAll: React.FC = () => {
           </div>
         ))}
       </div>
+
+        {/* Pager */}
+  {totalPages > 1 && (
+    <div className="flex justify-center items-center gap-2 mt-4 flex-wrap">
+      <button
+        disabled={currentPage === 1}
+        onClick={() => setCurrentPage((prev) => prev - 1)}
+        className="px-3 py-1 !bg-gray-200 rounded disabled:opacity-40"
+      >
+        &lt;
+      </button>
+
+      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+        <button
+          key={page}
+          onClick={() => setCurrentPage(page)}
+          className={`px-3 py-1 rounded ${
+            page === currentPage
+              ? '!bg-blue-600 !text-white !font-bold'
+              : '!bg-gray-200 !text-gray-800'
+          }`}
+        >
+          {page}
+        </button>
+      ))}
+
+      <button
+        disabled={currentPage === totalPages}
+        onClick={() => setCurrentPage((prev) => prev + 1)}
+        className="px-3 py-1 bg-gray-200 rounded disabled:opacity-40"
+      >
+        &gt;
+      </button>
+    </div>
+  )}
+
 
       {/* Doc info window */}
       {selectedDoc && (
