@@ -14,7 +14,7 @@ const ViewAll: React.FC = () => {
   const [docContent, setDocContent] = useState<string>('');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<string | null>(null);
 
-  // Page devision
+  // Page division
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
