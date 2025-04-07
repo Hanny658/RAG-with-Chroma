@@ -30,7 +30,7 @@ const ViewAll: React.FC = () => {
   useEffect(() => {
     if (selectedDoc) {
       axios
-        .get(`${backendURL}/doc/${selectedDoc}`)
+        .get(`${backendURL}/doc/${encodeURIComponent(selectedDoc)}`)
         .then((res) => setDocContent(res.data.content))
         .catch((error) => setDocContent(`[!] Error loading content: ${error}`));
     }

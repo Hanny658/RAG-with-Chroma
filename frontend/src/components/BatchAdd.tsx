@@ -12,6 +12,7 @@ const BatchAdd: React.FC = () => {
   const [showSegmentModal, setShowSegmentModal] = useState(false);
   const [segmentText, setSegmentText] = useState('');
   const [loadingSegment, setLoadingSegment] = useState(false);
+  const [addInProgress, setAddInProgress] = useState(false);
 
   const handleAddEmptyRecord = () => {
     setRecords([...records, { id: '', content: '' }]);
@@ -30,12 +31,14 @@ const BatchAdd: React.FC = () => {
   };
 
   const handleSubmitRecords = async () => {
+    setAddInProgress(true);
     for (const record of records) {
       if (record.id && record.content) {
         await axios.post(`${backendURL}/doc/upsert`, record);
       }
     }
-    setRecords([]); // 清空表单
+    setRecords([]);
+    setAddInProgress(false);
   };
 
   const handleSegmentSubmit = async () => {
@@ -57,7 +60,6 @@ const BatchAdd: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {/* 顶部按钮 */}
       <div className="flex justify-between items-center">
         <button
           onClick={() => setShowSegmentModal(true)}
@@ -82,17 +84,16 @@ const BatchAdd: React.FC = () => {
                 : 'bi bi-database-add hover:bi-database-fill-add'
             }
           ></i>
-          Add
+          {addInProgress? "Adding..." : "Add All"}
         </button>
       </div>
 
-      {/* 记录表单 */}
       {records.map((record, index) => (
         <div key={index} className="space-y-2 border p-4 !rounded !bg-white shadow-sm">
           <div className="flex justify-between items-center">
             <label className="!font-medium">Doc ID</label>
             <button onClick={() => handleDeleteRecord(index)} className="!text-red-500 hover:underline !text-sm">
-              删除
+              Delete
             </button>
           </div>
           <input
@@ -112,12 +113,10 @@ const BatchAdd: React.FC = () => {
         </div>
       ))}
 
-      {/* 添加按钮 */}
       <div className="w-full border-dashed border-2 !border-gray-300 py-6 flex justify-center items-center rounded cursor-pointer !hover:bg-gray-50" onClick={handleAddEmptyRecord}>
         <i className="bi bi-file-earmark-plus text-2xl !text-gray-500"></i>
       </div>
 
-      {/* 段落自动分段弹窗 */}
       {showSegmentModal && (
         <div className="fixed inset-0 !bg-black !bg-opacity-40 flex items-center justify-center z-50">
           <div className="!bg-white w-full max-w-lg p-6 rounded-xl shadow-xl">
@@ -138,13 +137,13 @@ const BatchAdd: React.FC = () => {
                   onClick={() => setShowSegmentModal(false)}
                   className="!bg-gray-500 !text-white px-4 py-2 rounded !hover:bg-gray-600"
                 >
-                  关闭
+                  Close
                 </button>
                 <button
                   onClick={handleSegmentSubmit}
                   className="!bg-blue-600 !text-white px-4 py-2 rounded !hover:bg-blue-700"
                 >
-                  提交
+                  Submit
                 </button>
               </div>
             )}
