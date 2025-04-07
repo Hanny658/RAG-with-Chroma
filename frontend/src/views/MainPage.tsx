@@ -21,9 +21,9 @@ const MainPage: React.FC = () => {
     }
 
     const tab = searchParams.get('tab') as Tab;
-  if (tab === 'add' || tab === 'config' || tab === 'view') {
-    setActiveTab(tab);
-  }
+    if (tab === 'add' || tab === 'config' || tab === 'view') {
+      setActiveTab(tab);
+    }
   }, [navigate, searchParams]);
 
   const handleLogout = () => {
@@ -81,25 +81,22 @@ const MainPage: React.FC = () => {
           <nav className="hidden sm:flex space-x-4 text-sm sm:text-base font-medium items-center">
             <button
               onClick={() => handleTabChange('view')}
-              className={`px-3 py-1 rounded transition bg-transparent border-transparent ${
-                activeTab === 'view' ? '!font-bold text-blue-600' : 'text-gray-700'
-              }`}
+              className={`px-3 py-1 rounded transition bg-transparent border-transparent ${activeTab === 'view' ? '!font-bold text-blue-600' : 'text-gray-700'
+                }`}
             >
-              View All
+              View & Manage
             </button>
             <button
               onClick={() => handleTabChange('add')}
-              className={`px-3 py-1 rounded transition bg-transparent border-transparent ${
-                activeTab === 'add' ? '!font-bold text-blue-600' : 'text-gray-700'
-              }`}
+              className={`px-3 py-1 rounded transition bg-transparent border-transparent ${activeTab === 'add' ? '!font-bold text-blue-600' : 'text-gray-700'
+                }`}
             >
               Add Records
             </button>
             <button
               onClick={() => handleTabChange('config')}
-              className={`px-3 py-1 rounded transition bg-transparent border-transparent ${
-                activeTab === 'config' ? '!font-bold text-blue-600' : 'text-gray-700'
-              }`}
+              className={`px-3 py-1 rounded transition bg-transparent border-transparent ${activeTab === 'config' ? '!font-bold text-blue-600' : 'text-gray-700'
+                }`}
             >
               Configuration
             </button>
@@ -116,25 +113,22 @@ const MainPage: React.FC = () => {
           <div className="sm:hidden px-4 pb-4 space-y-2">
             <button
               onClick={() => handleTabChange('view')}
-              className={`block w-full text-left px-3 py-2 rounded transition bg-transparent border-transparent ${
-                activeTab === 'view' ? '!font-bold text-blue-600' : 'text-gray-700'
-              }`}
+              className={`block w-full text-left px-3 py-2 rounded transition bg-transparent border-transparent ${activeTab === 'view' ? '!font-bold text-blue-600' : 'text-gray-700'
+                }`}
             >
               View All
             </button>
             <button
               onClick={() => handleTabChange('add')}
-              className={`block w-full text-left px-3 py-2 rounded transition bg-transparent border-transparent ${
-                activeTab === 'add' ? '!font-bold text-blue-600' : 'text-gray-700'
-              }`}
+              className={`block w-full text-left px-3 py-2 rounded transition bg-transparent border-transparent ${activeTab === 'add' ? '!font-bold text-blue-600' : 'text-gray-700'
+                }`}
             >
               Add Records
             </button>
             <button
               onClick={() => handleTabChange('config')}
-              className={`block w-full text-left px-3 py-2 rounded transition bg-transparent border-transparent ${
-                activeTab === 'config' ? '!font-bold text-blue-600' : 'text-gray-700'
-              }`}
+              className={`block w-full text-left px-3 py-2 rounded transition bg-transparent border-transparent ${activeTab === 'config' ? '!font-bold text-blue-600' : 'text-gray-700'
+                }`}
             >
               Configuration
             </button>

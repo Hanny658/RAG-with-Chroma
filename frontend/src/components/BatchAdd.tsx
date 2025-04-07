@@ -71,11 +71,10 @@ const BatchAdd: React.FC = () => {
         <button
           onClick={handleSubmitRecords}
           disabled={records.length === 0}
-          className={`flex items-center gap-2 px-4 py-2 rounded text-white text-sm font-semibold transition ${
-            records.length === 0
+          className={`flex items-center gap-2 px-4 py-2 rounded text-white text-sm font-semibold transition ${records.length === 0
               ? '!bg-gray-400 cursor-not-allowed'
               : '!bg-blue-600 !hover:bg-blue-700'
-          }`}
+            }`}
         >
           <i
             className={
@@ -84,7 +83,7 @@ const BatchAdd: React.FC = () => {
                 : 'bi bi-database-add hover:bi-database-fill-add'
             }
           ></i>
-          {addInProgress? "Adding..." : "Add All"}
+          {addInProgress ? "Adding..." : "Add All"}
         </button>
       </div>
 

@@ -37,7 +37,7 @@ const ViewAll: React.FC = () => {
   }, [selectedDoc, backendURL]);
 
   useEffect(() => {
-    setCurrentPage(1); 
+    setCurrentPage(1);
   }, [filter]);
 
   // Delete the Doc on doc ID
@@ -96,57 +96,50 @@ const ViewAll: React.FC = () => {
         ))}
       </div>
 
-        {/* Pager */}
-  {totalPages > 1 && (
-    <div className="flex justify-center items-center gap-2 mt-4 flex-wrap">
-      <button
-        disabled={currentPage === 1}
-        onClick={() => setCurrentPage((prev) => prev - 1)}
-        className="px-3 py-1 !bg-gray-200 rounded disabled:opacity-40"
-      >
-        &lt;
-      </button>
+      {/* Pager */}
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center gap-2 mt-4 flex-wrap">
+          <button
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage((prev) => prev - 1)}
+            className="px-3 py-1 !bg-gray-200 rounded disabled:opacity-40"
+          >
+            &lt;
+          </button>
 
-      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-        <button
-          key={page}
-          onClick={() => setCurrentPage(page)}
-          className={`px-3 py-1 rounded ${
-            page === currentPage
-              ? '!bg-blue-600 !text-white !font-bold'
-              : '!bg-gray-200 !text-gray-800'
-          }`}
-        >
-          {page}
-        </button>
-      ))}
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+            <button
+              key={page}
+              onClick={() => setCurrentPage(page)}
+              className={`px-3 py-1 rounded ${page === currentPage
+                  ? '!bg-blue-600 !text-white !font-bold'
+                  : '!bg-gray-200 !text-gray-800'
+                }`}
+            >
+              {page}
+            </button>
+          ))}
 
-      <button
-        disabled={currentPage === totalPages}
-        onClick={() => setCurrentPage((prev) => prev + 1)}
-        className="px-3 py-1 bg-gray-200 rounded disabled:opacity-40"
-      >
-        &gt;
-      </button>
-    </div>
-  )}
+          <button
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage((prev) => prev + 1)}
+            className="px-3 py-1 !bg-gray-200 rounded disabled:opacity-40"
+          >
+            &gt;
+          </button>
+        </div>
+      )}
 
 
       {/* Doc info window */}
       {selectedDoc && (
-        <div className="fixed inset-0 bg-black !bg-opacity-40 flex justify-center items-center z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
           <div className="bg-white max-w-xl w-full rounded-xl shadow-xl p-6">
             <h2 className="text-xl font-bold mb-4">{selectedDoc}</h2>
             <div className="max-h-[300px] overflow-y-auto border p-3 rounded text-sm whitespace-pre-wrap">
               {docContent ? docContent : <p>Loading content...</p>}
             </div>
             <div className="flex justify-end gap-3 mt-6">
-              <button
-                onClick={() => setSelectedDoc(null)}
-                className="!bg-blue-600 text-white px-4 py-2 rounded !hover:bg-blue-700"
-              >
-                Looks Good
-              </button>
               <button
                 onClick={() => {
                   setShowDeleteConfirm(selectedDoc);
@@ -156,6 +149,12 @@ const ViewAll: React.FC = () => {
               >
                 Delete
               </button>
+              <button
+                onClick={() => setSelectedDoc(null)}
+                className="!bg-blue-600 text-white px-4 py-2 rounded !hover:bg-blue-700"
+              >
+                Looks Good
+              </button>
             </div>
           </div>
         </div>
@@ -163,7 +162,7 @@ const ViewAll: React.FC = () => {
 
       {/* Comfirm Delete? */}
       {showDeleteConfirm && (
-        <div className="fixed inset-0 bg-black !bg-opacity-40 flex justify-center items-center z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
           <div className="bg-white w-full max-w-md rounded-xl p-6 text-center shadow-xl">
             <p className="text-lg font-semibold mb-2">Are you sure to delete this document?</p>
             <p className="text-sm text-gray-700 mb-6">{showDeleteConfirm}</p>
