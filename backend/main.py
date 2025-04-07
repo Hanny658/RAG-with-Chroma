@@ -8,33 +8,33 @@ import chromadb
 from openai import OpenAI
 import uvicorn
 # import defined custom classes
-from classes import ChatRequest, Document, ParagraphInput
+from classes import ChatRequest, Document, ParagraphInput, NResInput
 
 
 # Load CORS settings from the JSON file
-def load_cors_config(file_path: str):
+def load_config(file_path: str):
     with open(file_path, 'r') as file:
         return json.load(file)
 
 
 # Path to the JSON file (adjust if needed)
-CONFIG_PATH = os.path.join(os.path.dirname(__file__), 'cors_config.json')
-cors_config = load_cors_config(CONFIG_PATH)
+CONFIG_PATH = os.path.join(os.path.dirname(__file__), 'config.json')
+curr_config = load_config(CONFIG_PATH)
 
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=cors_config.get("allow_origins", []),
-    allow_credentials=cors_config.get("allow_credentials", False),
-    allow_methods=cors_config.get("allow_methods", []),
-    allow_headers=cors_config.get("allow_headers", []),
+    allow_origins=curr_config.get("allow_origins", []),
+    allow_credentials=curr_config.get("allow_credentials", False),
+    allow_methods=curr_config.get("allow_methods", []),
+    allow_headers=curr_config.get("allow_headers", []),
 )
 
 # Global Configs (Magic numbers? Hum-mm...)
 PORT_NUM = 3053     # Port number used for this app to listen (Surely not in Carlton)
-N_RES = 3           # Number of the closest result should we attach when running RAG
+N_RES = curr_config.get("N_RES", 3)           # Number of the closest result should we attach when running RAG
 
-# Load env from root directory (backend/ by default. edit below for customed dir)
+# Load env from root directory (backend/ by default. edit below for customised dir)
 project_root = Path(__file__).resolve().parent
 dotenv_path = project_root / '.env'
 load_dotenv(dotenv_path=dotenv_path)
@@ -56,6 +56,12 @@ openai_client = OpenAI(api_key=OPENAI_API_KEY)
 deepseek_client = OpenAI(api_key=DEEPSEEK_API_KEY, base_url=deepseek_URL)
 
 
+# Save config.json as persistent
+def save_config(data):
+    with open(CONFIG_PATH, 'w') as f:
+        json.dump(data, f, indent=2)
+
+
 # Get text Embedding from OpenAI
 def get_embedding(text):
     res = openai_client.embeddings.create(
@@ -71,7 +77,7 @@ def chat_with_llm(request: ChatRequest):
     if request.llm == "":
         raise HTTPException(status_code=400, detail="Please pass the name (ChatGPT | Deepseek) in this field.")
     if request.llm not in ["ChatGPT", "Deepseek"]:
-        raise HTTPException(status_code=400, detail="Currently, only ChatGPT and Deepseek are supported for LLM.")
+        raise HTTPException(status_code=400, detail="Currently only ChatGPT and Deepseek are supported for LLM.")
 
     question_embedding = get_embedding(request.user_question)
     results = collection.query(query_embeddings=[question_embedding], n_results=N_RES)
@@ -204,6 +210,31 @@ async def paragraph_divide(request_data: ParagraphInput):
             )
 
     raise HTTPException(status_code=500, detail="Failed to get valid response from OpenAI after 3 attempts.")
+
+
+@app.post("/update-n")
+def update_n(input_data: NResInput):
+    num = input_data.n
+
+    if not (0 <= num <= 5):
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid number, please provide a number between 0-5"
+        )
+
+    # Load global settings to change
+    global curr_config
+    global N_RES
+
+    if num == 0:
+        print(f"[CUTE-RAG] Showing N={N_RES}.")
+        return {"n": N_RES}
+    else:
+        curr_config["N_RES"] = num
+        save_config(curr_config)
+        print(f"[CUTE-RAG] Updating N_RES from {N_RES} to {num}.")
+        N_RES = num
+        return {"n": num}
 
 
 # Start server | ``` To run, type < python .\main.py > in the commands ```

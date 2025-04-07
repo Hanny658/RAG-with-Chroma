@@ -15,3 +15,7 @@ class ChatRequest(BaseModel):
 
 class ParagraphInput(BaseModel):
     text: str = Field(..., min_length=1, description="Non-empty paragraph to be divided")
+
+
+class NResInput(BaseModel):
+    n: int
