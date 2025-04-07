@@ -8,7 +8,7 @@ import chromadb
 from openai import OpenAI
 import uvicorn
 # import defined custom classes
-from classes import ChatRequest, Document
+from classes import ChatRequest, Document, ParagraphInput
 
 
 # Load CORS settings from the JSON file
@@ -145,6 +145,65 @@ def get_all_document_ids():
     result = collection.get()
     print(f"[CUTE-RAG] Showing all Document Ids.")
     return {"ids": result["ids"]}
+
+
+def is_valid_response(response_text: str) -> bool:
+    """
+    Check if the response is a JSON-formatted list of dicts with 'id' and 'content' keys.
+    """
+    try:
+        parsed = json.loads(response_text)
+        if isinstance(parsed, list):
+            for item in parsed:
+                if not isinstance(item, dict) or "id" not in item or "content" not in item:
+                    print("Failed to get division, instead we got:")
+                    print(response_text)
+                    return False
+            return True
+        print("Failed to get division, instead we got:")
+        print(response_text)
+        return False
+    except json.JSONDecodeError:
+        print("Failed to get division, instead we got:")
+        print(response_text)
+        return False
+
+
+def ask_openai(user_prompt: str) -> str:
+    """
+    Sends prompt to OpenAI Chat API and returns the response text.
+    """
+    response = openai_client.chat.completions.create(
+        model=openAI_model,
+        messages=[{"role": "user", "content": user_prompt}]
+    )
+    return response.choices[0].message.content
+
+
+@app.post("/chat/paragraph-divide")
+async def paragraph_divide(request_data: ParagraphInput):
+    base_prompt = (
+        "Please help me to separate this paragraph with different segments based on smaller topics, "
+        "with each segment around 2–5 sentences, and give them a short title. "
+        "Please answer in a JSON formatted list: (plain text without wrapping in ```json ```) "
+        "[{id: <the title>, content: <segment>}, {id: <the title>, content: <segment>}, ...].\n\n"
+    )
+    prompt = base_prompt + request_data.text
+
+    max_retries = 3
+    for attempt in range(max_retries):
+        response_text = ask_openai(prompt)
+        if is_valid_response(response_text):
+            return {"result": json.loads(response_text)}
+        elif attempt < max_retries - 1:
+            prompt = (
+                base_prompt +
+                "\n\nYour last response wasn't in valid JSON format or wrapped in other texts like MarkDown notation. "
+                "Please retry and return exactly what is asked:\n" +
+                request_data.text
+            )
+
+    raise HTTPException(status_code=500, detail="Failed to get valid response from OpenAI after 3 attempts.")
 
 
 # Start server | ``` To run, type < python .\main.py > in the commands ```
