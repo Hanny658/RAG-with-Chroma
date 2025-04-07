@@ -1,21 +1,23 @@
 from pydantic import BaseModel, Field
 
 
-# Data structure
+# Document data structure
 class Document(BaseModel):
     id: str
     content: str
 
 
-# Chat Request Structure
+# Chat request structure
 class ChatRequest(BaseModel):
     user_question: str
     llm: str = Field(default="ChatGPT")     # By default, ChatGPT
 
 
+# Paragraph auto-seg request structure
 class ParagraphInput(BaseModel):
     text: str = Field(..., min_length=1, description="Non-empty paragraph to be divided")
 
 
+# N-res setting request structure
 class NResInput(BaseModel):
     n: int

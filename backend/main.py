@@ -11,8 +11,8 @@ import uvicorn
 from classes import ChatRequest, Document, ParagraphInput, NResInput
 
 
-# Load CORS settings from the JSON file
 def load_config(file_path: str):
+    """ Load CORS settings from the JSON file """
     with open(file_path, 'r') as file:
         return json.load(file)
 
@@ -30,7 +30,7 @@ app.add_middleware(
     allow_headers=curr_config.get("allow_headers", []),
 )
 
-# Global Configs (Magic numbers? Hum-mm...)
+# Global Configs (or Magic numbers? Hum-mm...)
 PORT_NUM = 3053     # Port number used for this app to listen (Surely not in Carlton)
 N_RES = curr_config.get("N_RES", 3)           # Number of the closest result should we attach when running RAG
 
@@ -56,14 +56,14 @@ openai_client = OpenAI(api_key=OPENAI_API_KEY)
 deepseek_client = OpenAI(api_key=DEEPSEEK_API_KEY, base_url=deepseek_URL)
 
 
-# Save config.json as persistent
 def save_config(data):
+    """ Save config.json as persistent """
     with open(CONFIG_PATH, 'w') as f:
         json.dump(data, f, indent=2)
 
 
-# Get text Embedding from OpenAI
 def get_embedding(text):
+    """ Get text Embedding from OpenAI """
     res = openai_client.embeddings.create(
         input=text,
         model='text-embedding-3-small'
@@ -186,6 +186,7 @@ def ask_openai(user_prompt: str) -> str:
     return response.choices[0].message.content
 
 
+# [Beta] Let ChatGPT to help to divide the long paragraph to multiple short-ones
 @app.post("/chat/paragraph-divide")
 async def paragraph_divide(request_data: ParagraphInput):
     base_prompt = (
@@ -212,6 +213,7 @@ async def paragraph_divide(request_data: ParagraphInput):
     raise HTTPException(status_code=500, detail="Failed to get valid response from OpenAI after 3 attempts.")
 
 
+# [Global Setting] Get or Set the current N for resource query to chroma
 @app.post("/update-n")
 def update_n(input_data: NResInput):
     num = input_data.n
