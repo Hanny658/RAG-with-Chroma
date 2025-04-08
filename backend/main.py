@@ -31,7 +31,7 @@ app.add_middleware(
 )
 
 # Global Configs (or Magic numbers? Hum-mm...)
-PORT_NUM = 3053     # Port number used for this app to listen (Surely not in Carlton)
+PORT_NUM = curr_config.get("PORT", 3053)     # Port number with default 3053 (Surely not in Carlton)
 N_RES = curr_config.get("N_RES", 3)           # Number of the closest result should we attach when running RAG
 
 # Load env from root directory (backend/ by default. edit below for customised dir)
@@ -56,6 +56,8 @@ openai_client = OpenAI(api_key=OPENAI_API_KEY)
 deepseek_client = OpenAI(api_key=DEEPSEEK_API_KEY, base_url=deepseek_URL)
 
 
+# ============================= Util functions =============================
+
 def save_config(data):
     """ Save config.json as persistent """
     with open(CONFIG_PATH, 'w') as f:
@@ -70,6 +72,41 @@ def get_embedding(text):
     )
     return res.data[0].embedding
 
+
+def is_valid_response(response_text: str) -> bool:
+    """
+    Check if the response is a JSON-formatted list of dicts with 'id' and 'content' keys.
+    """
+    try:
+        parsed = json.loads(response_text)
+        if isinstance(parsed, list):
+            for item in parsed:
+                if not isinstance(item, dict) or "id" not in item or "content" not in item:
+                    print("Failed to get division, instead we got:")
+                    print(response_text)
+                    return False
+            return True
+        print("Failed to get division, instead we got:")
+        print(response_text)
+        return False
+    except json.JSONDecodeError:
+        print("Failed to get division, instead we got:")
+        print(response_text)
+        return False
+
+
+def ask_openai(user_prompt: str) -> str:
+    """
+    Sends prompt to OpenAI Chat API and returns the response text.
+    """
+    response = openai_client.chat.completions.create(
+        model=openAI_model,
+        messages=[{"role": "user", "content": user_prompt}]
+    )
+    return response.choices[0].message.content
+
+
+# =============================== APIs ===============================
 
 # Receiving user question, construct context with RAG, then send it to LLM APIs
 @app.post("/chat")
@@ -151,39 +188,6 @@ def get_all_document_ids():
     result = collection.get()
     print(f"[CUTE-RAG] Showing all Document Ids.")
     return {"ids": result["ids"]}
-
-
-def is_valid_response(response_text: str) -> bool:
-    """
-    Check if the response is a JSON-formatted list of dicts with 'id' and 'content' keys.
-    """
-    try:
-        parsed = json.loads(response_text)
-        if isinstance(parsed, list):
-            for item in parsed:
-                if not isinstance(item, dict) or "id" not in item or "content" not in item:
-                    print("Failed to get division, instead we got:")
-                    print(response_text)
-                    return False
-            return True
-        print("Failed to get division, instead we got:")
-        print(response_text)
-        return False
-    except json.JSONDecodeError:
-        print("Failed to get division, instead we got:")
-        print(response_text)
-        return False
-
-
-def ask_openai(user_prompt: str) -> str:
-    """
-    Sends prompt to OpenAI Chat API and returns the response text.
-    """
-    response = openai_client.chat.completions.create(
-        model=openAI_model,
-        messages=[{"role": "user", "content": user_prompt}]
-    )
-    return response.choices[0].message.content
 
 
 # [Beta] Let ChatGPT to help to divide the long paragraph to multiple short-ones
