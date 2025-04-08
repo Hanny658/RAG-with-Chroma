@@ -26,11 +26,6 @@ const MainPage: React.FC = () => {
     }
   }, [navigate, searchParams]);
 
-  const handleLogout = () => {
-    Cookies.remove('user');
-    navigate('/');
-  };
-
   const handleTabChange = (tab: Tab) => {
     setActiveTab(tab);
     setSearchParams({ tab });
@@ -53,11 +48,11 @@ const MainPage: React.FC = () => {
   return (
     <div className="flex flex-col h-screen w-screen bg-white">
       <header className="bg-gradient-to-b from-sky-200 to-blue-400 shadow-md">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           <img
             src="/CUTE.png"
             alt="Logo"
-            className="h-10 cursor-pointer"
+            className="h-12 cursor-pointer"
             onClick={() => handleTabChange('view')}
           />
 
@@ -100,12 +95,6 @@ const MainPage: React.FC = () => {
             >
               Configuration
             </button>
-            <button
-              onClick={handleLogout}
-              className="ml-4 text-red-600"
-            >
-              Log out
-            </button>
           </nav>
         </div>
 
@@ -131,12 +120,6 @@ const MainPage: React.FC = () => {
                 }`}
             >
               Configuration
-            </button>
-            <button
-              onClick={handleLogout}
-              className="block w-full text-left px-3 py-2 text-red-600"
-            >
-              Log out
             </button>
           </div>
         )}
