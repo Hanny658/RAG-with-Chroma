@@ -124,7 +124,40 @@ const Configurations: React.FC = () => {
         </div>
       </div>
 
-      
+      {/* Area for Playground */}
+      <div className="flex-1 flex flex-col items-center justify-start space-y-4">
+        <h2 className="text-lg font-bold !text-gray-800 text-center">
+          Context Playground <span className="text-sm !text-gray-500">[token applies]</span>
+        </h2>
+
+        <input
+          type="text"
+          placeholder="Enter your question here..."
+          className="w-full max-w-md p-2 border border-gray-300 rounded focus:outline-none focus:ring"
+          value={question}
+          onChange={(e) => setQuestion(e.target.value)}
+        />
+
+        <button
+          disabled={!question || loadingContext}
+          onClick={handleSubmitQuestion}
+          className={`text-4xl transition ${
+            !question || loadingContext
+              ? '!text-gray-400 cursor-not-allowed'
+              : '!text-blue-600 hover:!text-blue-700'
+          }`}
+        >
+          <i className="bi bi-arrow-down-square-fill"></i>
+        </button>
+
+        <textarea
+          rows={8}
+          className="w-full max-w-md p-3 border border-gray-300 rounded resize-none"
+          placeholder="Context data will be here..."
+          value={contextData}
+          readOnly
+        />
+      </div>
     </div>
   );
 };
