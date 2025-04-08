@@ -8,7 +8,7 @@ import chromadb
 from openai import OpenAI
 import uvicorn
 # import defined custom classes
-from classes import ChatRequest, Document, ParagraphInput, NResInput
+from classes import ChatRequest, Document, ParagraphInput, NResInput, QuestionInput
 
 
 def load_config(file_path: str):
@@ -95,6 +95,16 @@ def is_valid_response(response_text: str) -> bool:
         return False
 
 
+def construct_context(question: str) -> str:
+    """
+    Construct the context based on the user's question with embedding
+    """
+    question_embedding = get_embedding(question)
+    results = collection.query(query_embeddings=[question_embedding], n_results=N_RES)
+    context_found = "\n".join(results['documents'][0])
+    return context_found
+
+
 def ask_openai(user_prompt: str) -> str:
     """
     Sends prompt to OpenAI Chat API and returns the response text.
@@ -116,10 +126,7 @@ def chat_with_llm(request: ChatRequest):
     if request.llm not in ["ChatGPT", "Deepseek"]:
         raise HTTPException(status_code=400, detail="Currently only ChatGPT and Deepseek are supported for LLM.")
 
-    question_embedding = get_embedding(request.user_question)
-    results = collection.query(query_embeddings=[question_embedding], n_results=N_RES)
-
-    context = "\n".join(results['documents'][0])
+    context = construct_context(request.user_question)
 
     user_prompt = f"Context: {context}\n\nQuestion: {request.user_question}\nAnswer:"
 
@@ -238,9 +245,17 @@ def update_n(input_data: NResInput):
     else:
         curr_config["N_RES"] = num
         save_config(curr_config)
-        print(f"[CUTE-RAG] Updating N_RES from {N_RES} to {num}.")
+        print(f"[CUTE-RAG] Updating N from {N_RES} to {num}.")
         N_RES = num
-        return {"n": num}
+        return {"n": N_RES}
+
+
+# Get the context only from inputted question (to be used in configuration)
+@app.post("/test/get-context")
+def get_context(question_input: QuestionInput):
+    test_question = question_input.question
+    constructed_context = f"Context got with current setting: \n{construct_context(test_question)}"
+    return {"context": constructed_context}
 
 
 # Start server | ``` To run, type < python .\main.py > in the commands ```
