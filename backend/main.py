@@ -1,5 +1,4 @@
 import os
-from dotenv import load_dotenv
 from pathlib import Path
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -34,20 +33,16 @@ app.add_middleware(
 PORT_NUM = curr_config.get("PORT", 3053)     # Port number with default 3053 (Surely not in Carlton)
 N_RES = curr_config.get("N_RES", 3)           # Number of the closest result should we attach when running RAG
 
-# Load env from root directory (backend/ by default. edit below for customised dir)
-project_root = Path(__file__).resolve().parent
-dotenv_path = project_root / '.env'
-load_dotenv(dotenv_path=dotenv_path)
 # ========================================================
-OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-openAI_URL = os.getenv('OPENAI_API_URL')
-openAI_model = os.getenv('OPENAI_MODEL')
-DEEPSEEK_API_KEY = os.getenv('DEEPSEEK_API_KEY')
-deepseek_URL = os.getenv('DEEPSEEK_API_URL')
-deepseek_model = os.getenv('DEEPSEEK_MODEL')
+OPENAI_API_KEY = curr_config.get('OPENAI_API_KEY')
+openAI_URL = curr_config.get('OPENAI_API_URL')
+openAI_model = curr_config.get('OPENAI_MODEL')
+DEEPSEEK_API_KEY = curr_config.get('DEEPSEEK_API_KEY')
+deepseek_URL = curr_config.get('DEEPSEEK_API_URL')
+deepseek_model = curr_config.get('DEEPSEEK_MODEL')
 
 # Initialise Chroma db with persist setup
-collection_name = "do_chatbot"
+collection_name = curr_config.get("COLLECTION_NAME")
 chroma_client = chromadb.PersistentClient(path="./chroma_db")
 collection = chroma_client.get_or_create_collection(collection_name)
 

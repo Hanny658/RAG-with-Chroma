@@ -6,5 +6,12 @@
   ],
   "allow_methods": ["*"],
   "allow_headers": ["*"],
-  "N_RES": 3
+  "N_RES": 3,
+  "COLLECTION_NAME": "chatbot",
+  "OPENAI_API_URL": "https://api.openai.com",
+  "OPENAI_API_KEY": "<Your API Key start with sk-...>",
+  "OPENAI_MODEL": "gpt-4o-mini",
+  "DEEPSEEK_API_URL": "https://api.deepseek.com",
+  "DEEPSEEK_API_KEY":"<Your API Key start with sk-...>",
+  "DEEPSEEK_MODEL": "deepseek-chat"
 }
