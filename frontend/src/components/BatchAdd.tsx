@@ -88,9 +88,9 @@ const BatchAdd: React.FC = () => {
       </div>
 
       {records.map((record, index) => (
-        <div key={index} className="space-y-2 border p-4 !rounded !bg-white shadow-sm">
+        <div key={index} className="space-y-2 border p-3 !rounded !bg-white !shadow-md shadow-sky-400/40">
           <div className="flex justify-between items-center">
-            <label className="!font-medium">Doc ID</label>
+            <label className="!font-bold">New Document</label>
             <button onClick={() => handleDeleteRecord(index)} className="!text-red-500 hover:underline !text-sm">
               Delete
             </button>
@@ -112,12 +112,13 @@ const BatchAdd: React.FC = () => {
         </div>
       ))}
 
-      <div className="w-full border-dashed border-2 !border-gray-300 py-6 flex justify-center items-center rounded cursor-pointer !hover:bg-gray-50" onClick={handleAddEmptyRecord}>
+      <div className="w-full border-dashed border-2 !border-gray-300 py-6 flex justify-center items-center rounded cursor-pointer hover:!bg-gray-50" 
+      onClick={handleAddEmptyRecord}>
         <i className="bi bi-file-earmark-plus text-2xl !text-gray-500"></i>
       </div>
 
       {showSegmentModal && (
-        <div className="fixed inset-0 !bg-black !bg-opacity-40 flex items-center justify-center z-50">
+        <div className="fixed inset-0 !bg-black/50 flex items-center justify-center z-50">
           <div className="!bg-white w-full max-w-lg p-6 rounded-xl shadow-xl">
             <p className="text-lg font-bold mb-4">Auto Segmentation of a Long Paragraph</p>
             <p className='!text-gray-500'>[Beta Test Function]</p>

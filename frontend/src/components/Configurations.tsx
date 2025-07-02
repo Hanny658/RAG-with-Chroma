@@ -141,7 +141,7 @@ const Configurations: React.FC = () => {
         <button
           disabled={!question || loadingContext}
           onClick={handleSubmitQuestion}
-          className={`text-4xl transition ${
+          className={`text-4xl !border-none !p-0 !bg-transparent transition ${
             !question || loadingContext
               ? '!text-gray-400 cursor-not-allowed'
               : '!text-blue-600 hover:!text-blue-700'

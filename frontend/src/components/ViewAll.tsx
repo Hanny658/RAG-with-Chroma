@@ -78,13 +78,13 @@ const ViewAll: React.FC = () => {
         {currentItems.map((id, index) => (
           <div
             key={id}
-            className="flex justify-between items-center bg-white p-3 rounded shadow hover:bg-gray-50"
+            className="flex justify-between items-center bg-white p-3 rounded shadow hover:bg-gray-100"
+            onClick={() => setSelectedDoc(id)}
           >
             <div className="flex items-center gap-4">
               <span className="text-gray-500 w-6 text-right">{index + 1}.</span>
               <span
                 className="text-blue-600 cursor-pointer hover:underline"
-                onClick={() => setSelectedDoc(id)}
               >
                 {id}
               </span>
@@ -105,9 +105,9 @@ const ViewAll: React.FC = () => {
           <button
             disabled={currentPage === 1}
             onClick={() => setCurrentPage((prev) => prev - 1)}
-            className="px-3 py-1 !bg-gray-200 rounded disabled:opacity-40"
+            className="!px-3 !py-1 !bg-gray-300 rounded disabled:opacity-40"
           >
-            &lt;
+            <i className="bi bi-arrow-left-short text-2xl"></i>
           </button>
 
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
@@ -116,7 +116,7 @@ const ViewAll: React.FC = () => {
               onClick={() => setCurrentPage(page)}
               className={`px-3 py-1 rounded ${page === currentPage
                   ? '!bg-blue-600 !text-white !font-bold'
-                  : '!bg-gray-200 !text-gray-800'
+                  : '!bg-gray-300 !text-gray-800'
                 }`}
             >
               {page}
@@ -126,9 +126,9 @@ const ViewAll: React.FC = () => {
           <button
             disabled={currentPage === totalPages}
             onClick={() => setCurrentPage((prev) => prev + 1)}
-            className="px-3 py-1 !bg-gray-200 rounded disabled:opacity-40"
+            className="!px-3 !py-1 !bg-gray-300 rounded disabled:opacity-40"
           >
-            &gt;
+            <i className="bi bi-arrow-right-short text-2xl"></i>
           </button>
         </div>
       )}
