@@ -72,7 +72,7 @@ const Configurations: React.FC = () => {
       {/* Settings Area */}
       <div className="flex-1 space-y-6">
       <h2 className="text-lg font-bold !text-gray-800 text-center">
-          Settings
+          Global Settings
         </h2>
         <div className="flex items-center justify-between p-2">
           <div className="flex items-center gap-2 relative">
@@ -147,7 +147,7 @@ const Configurations: React.FC = () => {
               : '!text-blue-600 hover:!text-blue-700'
           }`}
         >
-          <i className="bi bi-arrow-down-square-fill"></i>
+          <i className="bi text-4xl p-0 bi-arrow-down-square-fill"></i>
         </button>
 
         <textarea

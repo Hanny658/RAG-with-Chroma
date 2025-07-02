@@ -71,7 +71,7 @@ const ViewAll: React.FC = () => {
       />
 
       {/* Doc List */}
-      <div className="space-y-2">
+      <div className="space-y-2 min-h-[70vh]">
         {currentItems.map((id, index) => (
           <div
             key={id}

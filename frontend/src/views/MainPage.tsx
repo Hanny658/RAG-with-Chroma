@@ -47,7 +47,7 @@ const MainPage: React.FC = () => {
 
   return (
     <div className="flex flex-col h-screen w-screen bg-white">
-      <header className="bg-gradient-to-b from-sky-200 to-blue-400 shadow-md">
+      <header className="bg-gradient-to-b from-sky-400 to-blue-400 shadow-md">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           <img
             src="/CUTE.png"

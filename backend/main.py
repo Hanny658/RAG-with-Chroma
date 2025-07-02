@@ -121,9 +121,9 @@ def chat_with_llm(request: ChatRequest):
     if request.llm not in ["ChatGPT", "Deepseek"]:
         raise HTTPException(status_code=400, detail="Currently only ChatGPT and Deepseek are supported for LLM.")
 
-    context = construct_context(request.user_question)
+    context = construct_context(request.question)
 
-    user_prompt = f"Context: {context}\n\nQuestion: {request.user_question}\nAnswer:"
+    user_prompt = f"Context: {context}\n\nQuestion: {request.question}\nAnswer:"
 
     print(f"[CUTE-RAG] Dealing with constructed message: ${user_prompt}")
 

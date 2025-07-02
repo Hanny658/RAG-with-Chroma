@@ -9,7 +9,7 @@ class Document(BaseModel):
 
 # Chat request structure
 class ChatRequest(BaseModel):
-    user_question: str
+    question: str
     llm: str = Field(default="ChatGPT")     # By default, ChatGPT
 
 
