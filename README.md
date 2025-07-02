@@ -15,7 +15,7 @@ Ensure your system meets the following requirements before setting up RAG-with-C
 
 - **Python**: Version 3.10 or higher
 - **Node.js**: Version 18 or higher
-- **SQLite**: Version 3.35 or higher
+- **SQLite**: Version 3.35 or higher ([Why?](https://docs.trychroma.com/updates/troubleshooting#sqlite))
 - **React**: Version 19 or higher
 
 ## Installation
