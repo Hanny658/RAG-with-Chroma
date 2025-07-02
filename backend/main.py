@@ -8,6 +8,8 @@ from openai import OpenAI
 import uvicorn
 # import defined custom classes
 from classes import ChatRequest, Document, ParagraphInput, NResInput, QuestionInput
+# import functions that is defined in functions.py
+# from functions import FUNCTIONS
 
 
 def load_config(file_path: str):
