@@ -1,6 +1,7 @@
 // src/component/ViewAll.tsx
 import { SetStateAction, useEffect, useState } from 'react';
 import axios from 'axios';
+import DocModal from './DocDetailModal';
 
 // interface DocEntry {
 //   id: string;
@@ -42,8 +43,10 @@ const ViewAll: React.FC = () => {
 
   // Delete the Doc on doc ID
   const handleDelete = (docId: string) => {
+    console.log(`Deleting ${docId}`);
+    const encodedId = encodeURIComponent(docId); // Encode first for any special chars
     axios
-      .delete(`${backendURL}/doc/${docId}`)
+      .delete(`${backendURL}/doc/${encodedId}`)
       .then(() => {
         setDocs((prev) => prev.filter((id) => id !== docId));
         setShowDeleteConfirm(null);
@@ -133,36 +136,20 @@ const ViewAll: React.FC = () => {
 
       {/* Doc info window */}
       {selectedDoc && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
-          <div className="bg-white max-w-xl w-full rounded-xl shadow-xl p-6">
-            <h2 className="text-xl font-bold mb-4">{selectedDoc}</h2>
-            <div className="max-h-[300px] overflow-y-auto border p-3 rounded text-sm whitespace-pre-wrap">
-              {docContent ? docContent : <p>Loading content...</p>}
-            </div>
-            <div className="flex justify-end gap-3 mt-6">
-              <button
-                onClick={() => {
-                  setShowDeleteConfirm(selectedDoc);
-                  setSelectedDoc(null);
-                }}
-                className="!bg-red-600 text-white px-4 py-2 rounded !hover:bg-red-700"
-              >
-                Delete
-              </button>
-              <button
-                onClick={() => setSelectedDoc(null)}
-                className="!bg-blue-600 text-white px-4 py-2 rounded !hover:bg-blue-700"
-              >
-                Looks Good
-              </button>
-            </div>
-          </div>
-        </div>
+        <DocModal
+          docId={selectedDoc}
+          initialContent={docContent || ''}
+          onClose={() => setSelectedDoc(null)}
+          onDelete={(id) => {
+            setShowDeleteConfirm(id);
+            setSelectedDoc(null);
+          }}
+        />
       )}
 
       {/* Comfirm Delete? */}
       {showDeleteConfirm && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
+        <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
           <div className="bg-white w-full max-w-md rounded-xl p-6 text-center shadow-xl">
             <p className="text-lg font-semibold mb-2">Are you sure to delete this document?</p>
             <p className="text-sm text-gray-700 mb-6">{showDeleteConfirm}</p>
