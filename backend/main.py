@@ -143,6 +143,8 @@ def chat_with_llm(request: ChatRequest):
         answer = completion.choices[0].message.content
     else:
         raise HTTPException(status_code=400, detail="Currently, only ChatGPT and Deepseek are supported for LLM.")
+    
+    # TODO: Adding function call handling logics and return that to your frontend.
 
     return {"status": "success", "answer": answer}
 

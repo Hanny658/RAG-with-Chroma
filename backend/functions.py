@@ -1,4 +1,4 @@
-# functions.py
+# functions.py - currently as an example
 
 # Schema definitions for OpenAI Function Calling
 NAVIGATE_SCHEMA_REACT = {

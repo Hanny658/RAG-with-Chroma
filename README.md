@@ -127,3 +127,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ---
 
 For further assistance or to contribute to the project, please refer to the repository's [GitHub page](https://github.com/Hanny658/RAG-with-Chroma). 
+It should be ready for fork and customise by yourself now~
