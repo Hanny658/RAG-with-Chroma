@@ -125,7 +125,8 @@ def chat_with_llm(request: ChatRequest):
 
     context = construct_context(request.question)
 
-    user_prompt = f"Context: {context}\n\nQuestion: {request.question}\nAnswer:"
+    user_prompt = f"Context: {context}\n\nQuestion: {request.question}\n" \
+                  f"Note: Please answer with No Markdown. Plain text only.\nAnswer:"
 
     print(f"[CUTE-RAG] Dealing with constructed message: ${user_prompt}")
 
